@@ -1,14 +1,14 @@
 import csv
 import time
-
+import math
 
 def read_file(file):
     reader = csv.DictReader(open(file))
     info = []
     for row in reader:
         row['price'] = float(row['price'])
-        row['profit in (%)'] = float(row['profit in (%)'])
-        row['profit in euros'] = row['price'] * row['profit in (%)'] / 100.0
+        row['profit'] = float(row['profit'])
+        row['profit in euros'] = row['price'] * row['profit'] / 100.0
         info.append(row)
     return info
 
@@ -16,7 +16,6 @@ def read_file(file):
 def sort_data_by_price(data_set):
     data_set.sort(key=lambda share: share['price'], reverse=True)
     return data_set
-
 
 
 def optimized_combinaison(remaining_shares, remaining_budget):
@@ -47,15 +46,11 @@ if __name__ == '__main__':
         if total_profit > max_profit:
             max_profit = total_profit
             best_combinaison = result
-            # print([share['name'] for share in best_portfolio])
-            # print('cost', sum([share['price'] for share in best_portfolio]))
-            # print('profit', max_profit)
-            # print("\n")
     duration = time.time() - start_time
     print("--- Done ---")
 
-    print(counter)
+    print(f'number of combinaison checked : {counter}')
     print("Search duration: %s seconds" % duration)
-    print([share['name'] for share in best_combinaison])
-    print('cost', sum([share['price'] for share in best_combinaison]))
-    print('profit', max_profit)
+    print('list of shares bought:', [share['name'] for share in best_combinaison])
+    print('money spend', sum([share['price'] for share in best_combinaison]))
+    print(f'profit made : {max_profit} €')
