@@ -7,8 +7,8 @@ def read_file(file):
     info = []
     for row in reader:
         row['price'] = float(row['price'])
-        row['profit in (%)'] = float(row['profit in (%)'])
-        row['profit in euros'] = row['price'] * row['profit in (%)'] / 100.0
+        row['profit'] = float(row['profit'])
+        row['profit in euros'] = row['price'] * row['profit'] / 100.0
         info.append(row)
     return info
 
@@ -19,10 +19,10 @@ def bruteforce(my_list):
     else:
         my_new_list = my_list.copy()
         first_element = my_new_list.pop(0)
-        for possibility in bruteforce(my_new_list):             # [3] in [[3],]
-            yield possibility                                   # [3]
-            yield possibility + [first_element]                 # [3] + [2] =(yield)[3,2]
-        yield [first_element]                                   # [2]
+        for possibility in bruteforce(my_new_list):
+            yield possibility
+            yield possibility + [first_element]
+        yield [first_element]
 
 
 if __name__ == '__main__':
@@ -31,10 +31,11 @@ if __name__ == '__main__':
     best_profit = 0
     wallet = 500.0
     best_combinaison = []
-
+    total_combinaison = 0
     for combinaison in bruteforce(my_data):
         total_price = 0
         total_profit = 0
+        total_combinaison += 1
         for share in combinaison:
             total_price += share['price']
             total_profit += share['profit in euros']
@@ -44,13 +45,10 @@ if __name__ == '__main__':
             best_profit = total_profit
             best_combinaison = combinaison
 
-    print(best_profit)
-    print(best_combinaison)
-
+    print(f'list of shares bought: {best_combinaison}')
+    print('money spend', sum([share['price'] for share in best_combinaison]), '€')
+    print(f'Profit made : {best_profit} €')
     duration = time.time() - start_time
-    print("Search duration: %s seconds" % duration)
-
-
-
-
+    print(f'Total search Time {duration}s')
+    print(f'Total number of possible combinaison : {total_combinaison:,}')
 
