@@ -3,6 +3,7 @@ import time
 
 
 def read_file(file):
+    """Read a file  and return rows of share price and profit"""
     reader = csv.DictReader(open(file))
     info = []
     for row in reader:
@@ -14,6 +15,7 @@ def read_file(file):
 
 
 def bruteforce(my_list):
+    """take a list as parameter and find all unique combinaison"""
     if len(my_list) <= 1:
         yield my_list
     else:
@@ -26,16 +28,15 @@ def bruteforce(my_list):
 
 
 if __name__ == '__main__':
+    # my data will represent the file we use
     my_data = read_file('stock_list.csv')
     start_time = time.time()
     best_profit = 0
     wallet = 500.0
     best_combinaison = []
-    total_combinaison = 0
     for combinaison in bruteforce(my_data):
         total_price = 0
         total_profit = 0
-        total_combinaison += 1
         for share in combinaison:
             total_price += share['price']
             total_profit += share['profit in euros']
@@ -50,5 +51,5 @@ if __name__ == '__main__':
     print(f'Profit made : {best_profit} €')
     duration = time.time() - start_time
     print(f'Total search Time {duration}s')
-    print(f'Total number of possible combinaison : {total_combinaison:,}')
+
 
